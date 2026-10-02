@@ -17,6 +17,12 @@ migrations_dir = "migrations"
 COOKIE_SECRET = "MK9wiA5mI4v66AUou5drnhH9j0e7SZLjKBgSmvJEPWyF3nrfL8iqNUBYgFuZBGXR"
 # ...
 
+# ...
+[vars]
+ADMIN_PASSWORD = "admin528355"
+COOKIE_SECRET = "MK9wiA5mI4v66AUou5drnhH9j0e7SZLjKBgSmvJEPWyF3nrfL8iqNUBYgFuZBGXR"
+# ...
+
 # Scheduled token refresh. This is just the BASE wake-up rate (every 6h);
 # the actual interval / batch / on-off is controlled in 系统设置 at runtime.
 # Free plan allows up to 5 cron triggers per account.

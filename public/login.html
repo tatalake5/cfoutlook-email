@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="登录 - Outlook 邮件管理">登录 - Outlook 邮件管理</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2'><path d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/><polyline points='22,6 12,13 2,6'/></svg>">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #06080f; --card-bg: rgba(14,18,32,0.78); --card-solid: #0e1220;
+      --border: rgba(255,255,255,0.08); --text: #e8ecf4; --text-muted: #7a84a0; --text-dim: #4e5672;
+      --input-bg: rgba(4,6,16,0.65); --primary: #6366f1; --accent: #a78bfa;
+      --danger: #f43f5e; --danger-bg: rgba(244,63,94,0.10);
+      --glow: rgba(99,102,241,0.20);
+    }
+    [data-theme="light"] {
+      --bg: #f4f6fb; --card-bg: rgba(255,255,255,0.82); --card-solid: #fff;
+      --border: rgba(0,0,0,0.07); --text: #1a1d2e; --text-muted: #6b7394; --text-dim: #9ca3be;
+      --input-bg: rgba(255,255,255,0.9); --glow: rgba(99,102,241,0.12);
+      --danger-bg: rgba(225,29,72,0.07);
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse at 50% 30%, var(--glow) 0%, transparent 60%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.35s, color 0.35s;
+    }
+    .login-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px) saturate(1.4);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 48px 44px;
+      width: 420px; max-width: 92%;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .theme-btn-login {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text-muted); width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; cursor: pointer; transition: all 0.2s;
+    }
+    .theme-btn-login:hover { border-color: var(--primary); color: var(--text); }
+    .lang-toggle-login {
+      position: absolute; top: 16px; right: 60px;
+      display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; height: 36px;
+    }
+    .lang-toggle-login button {
+      background: none; border: none; color: var(--text-muted);
+      padding: 0 10px; font-size: 12px; cursor: pointer; transition: all 0.2s;
+    }
+    .lang-toggle-login button:hover { color: var(--text); }
+    .lang-toggle-login button.active { color: var(--text); background: rgba(99,102,241,0.18); }
+    .logo { text-align: center; margin-bottom: 36px; }
+    .logo-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, #6366f1, #a78bfa);
+      border-radius: 16px;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 24px var(--glow);
+    }
+    .logo-icon svg { width: 26px; height: 26px; color: #fff; }
+    .logo h1 { font-size: 21px; font-weight: 600; letter-spacing: -0.3px; }
+    .logo p { font-size: 13.5px; color: var(--text-muted); margin-top: 6px; }
+    .form-group { margin-bottom: 24px; }
+    .form-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 520; }
+    .form-input {
+      width: 100%; padding: 12px 16px;
+      background: var(--input-bg); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-size: 15px;
+      outline: none; transition: all 0.2s;
+    }
+    .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
+    .form-input::placeholder { color: var(--text-dim); }
+    .login-btn {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 500; cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 16px var(--glow);
+    }
+    .login-btn:hover { box-shadow: 0 6px 28px var(--glow); transform: translateY(-1px); }
+    .login-btn:active { transform: translateY(0); }
+    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .error-msg {
+      background: var(--danger-bg); color: var(--danger);
+      padding: 11px 16px; border-radius: 10px; font-size: 13.5px;
+      margin-bottom: 20px; display: none;
+      border: 1px solid rgba(244,63,94,0.12);
+    }
+    .error-msg.show { display: block; }
+  </style>
+  <script>
+    // Apply theme before render to prevent flash
+    (function(){
+      var t = localStorage.getItem('theme') || 'auto';
+      if (t === 'auto') t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <div class="login-card">
+    <button class="theme-btn-login" onclick="toggleLoginTheme()" id="loginThemeBtn" title="切换主题" data-i18n-title="切换主题">🌙</button>
+    <div class="lang-toggle-login" title="切换语言" data-i18n-title="切换语言">
+      <button type="button" data-lang="zh" onclick="setLang('zh')">中</button>
+      <button type="button" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <h1 data-i18n="Outlook 邮件管理">Outlook 邮件管理</h1>
+      <p data-i18n="请输入密码登录系统">请输入密码登录系统</p>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label class="form-label" for="password" data-i18n="登录密码">登录密码</label>
+        <input type="password" class="form-input" id="password" placeholder="请输入密码" data-i18n-placeholder="请输入密码" autofocus required>
+      </div>
+      <button type="submit" class="login-btn" id="loginBtn" data-i18n="登 录">登 录</button>
+    </form>
+  </div>
+  <script src="/assets/i18n.js"></script>
+  <script>
+    // Theme toggle for login page
+    function toggleLoginTheme() {
+      var themes = ['dark', 'light', 'auto'];
+      var current = localStorage.getItem('theme') || 'dark';
+      var next = themes[(themes.indexOf(current) + 1) % themes.length];
+      localStorage.setItem('theme', next);
+      var resolved = next === 'auto' ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : next;
+      document.documentElement.setAttribute('data-theme', resolved);
+      updateLoginThemeBtn(next);
+    }
+    function updateLoginThemeBtn(theme) {
+      var btn = document.getElementById('loginThemeBtn');
+      btn.textContent = theme === 'light' ? '☀️' : theme === 'dark' ? '🌙' : '💻';
+    }
+    updateLoginThemeBtn(localStorage.getItem('theme') || 'auto');
+
+    // Login form
+    var form = document.getElementById('loginForm');
+    var btn = document.getElementById('loginBtn');
+    var errEl = document.getElementById('errorMsg');
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var pwd = document.getElementById('password').value;
+      if (!pwd) { showError(t('请输入密码')); return; }
+      btn.disabled = true; btn.textContent = t('登录中...');
+      errEl.classList.remove('show');
+      try {
+        var res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwd }),
+        });
+        var data = await res.json();
+        if (data.success) { window.location.href = '/'; }
+        else { showError(tServer(data.error?.message) || t('登录失败')); btn.disabled = false; btn.textContent = t('登 录'); }
+      } catch(e) { showError(t('网络错误，请重试')); btn.disabled = false; btn.textContent = t('登 录'); }
+    });
+    function showError(msg) { errEl.textContent = msg; errEl.classList.add('show'); }
+  </script>
+</body>
+</html>

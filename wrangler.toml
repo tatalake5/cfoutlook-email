@@ -12,6 +12,11 @@ database_name = "outlook-email-db"
 database_id = "de52e6b9-e93b-4010-bffe-39f54dc36a0b"
 migrations_dir = "migrations"
 
+# ...
+[vars]
+COOKIE_SECRET = "MK9wiA5mI4v66AUou5drnhH9j0e7SZLjKBgSmvJEPWyF3nrfL8iqNUBYgFuZBGXR"
+# ...
+
 # Scheduled token refresh. This is just the BASE wake-up rate (every 6h);
 # the actual interval / batch / on-off is controlled in 系统设置 at runtime.
 # Free plan allows up to 5 cron triggers per account.

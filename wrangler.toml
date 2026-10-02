@@ -16,4 +16,4 @@ migrations_dir = "migrations"
 # the actual interval / batch / on-off is controlled in 系统设置 at runtime.
 # Free plan allows up to 5 cron triggers per account.
 [triggers]
-crons = ["0 */6 * * *"]
+crons = []
